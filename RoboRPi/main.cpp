@@ -1,8 +1,11 @@
 #include <QCoreApplication>
+#include <QDebug>
+#include <log.h>
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+	qInstallMessageHandler(msgHandler);
+	QCoreApplication a(argc, argv);
 
     return a.exec();
 }

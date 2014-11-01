@@ -1,0 +1,7 @@
+Makefile.*
+Makefile
+*.o
+*.exe
+*.log
+*.pro.user
+*.pro.user.*
