@@ -5,11 +5,15 @@
 #include <QTime>
 #include <QTextStream>
 #include <QDebug>
+#include <QMutex>
+#include <QMutexLocker>
 
 #define WRITE_LOG_TO_FILE
 
 void msgHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+	static QMutex mutex;
+	static QMutexLocker mutexLocker(&mutex);
 	Q_UNUSED(context)
 	QString messageLevel;
 	QTime timeStamp = QTime::currentTime();
