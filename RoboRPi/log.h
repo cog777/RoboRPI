@@ -12,6 +12,7 @@ void msgHandler(QtMsgType type, const QMessageLogContext &context, const QString
 {
 	Q_UNUSED(context)
 	QString messageLevel;
+	QTime timeStamp = QTime::currentTime();
 
 	switch(type)
 	{
@@ -28,14 +29,19 @@ void msgHandler(QtMsgType type, const QMessageLogContext &context, const QString
 			messageLevel = "FATAL";
 	}
 
+	QString fullMessage;
+	QTextStream textBuilder(&fullMessage);
+	textBuilder << timeStamp.toString("hh:mm:ss.zzz") << " [" << messageLevel << "] " << msg << " File:" << context.file << \
+		   " Function:" << context.function << " Line:" << context.line << "\n";
+
 	QTextStream out(stdout);
-	out <<QTime::currentTime().toString("h:m:s") <<" [" <<messageLevel << "] " <<msg <<"\n";
+	out << fullMessage;
 
 #ifdef WRITE_LOG_TO_FILE
 	QFile file("Log.log");
 	QTextStream outF(&file);
-	file.open(QIODevice::WriteOnly | QIODevice::Text);
-	outF <<QTime::currentTime().toString("h:m:s") <<" [" <<messageLevel << "] " <<msg <<"\n";
+	file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+	outF << fullMessage;
 	file.flush();
 	file.close();
 #endif
